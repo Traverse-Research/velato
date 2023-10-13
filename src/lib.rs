@@ -14,6 +14,13 @@ pub use render::{RenderSink, Renderer};
 use std::collections::HashMap;
 use std::ops::Range;
 
+#[derive(Clone, Debug)]
+pub struct RgbaImage {
+    data: vello::peniko::Blob<u8>,
+    width: u32,
+    height: u32
+}
+
 /// Model of a Lottie file.
 #[derive(Clone, Default, Debug)]
 pub struct Composition {
@@ -29,6 +36,8 @@ pub struct Composition {
     pub assets: HashMap<String, Vec<model::Layer>>,
     /// Collection of layers.
     pub layers: Vec<model::Layer>,
+    /// All decoded images in the file
+    pub images: HashMap<String, RgbaImage>,
 }
 
 impl Composition {

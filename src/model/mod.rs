@@ -199,4 +199,7 @@ pub enum Content {
     },
     /// Collection of shapes.
     Shape(Vec<Shape>),
+    Image {
+        ref_id: String
+    },
 }

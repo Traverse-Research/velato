@@ -201,6 +201,13 @@ impl Renderer {
                 self.batch.render(sink);
                 self.batch.clear();
             }
+            Content::Image { ref_id } => {
+                let img = &animation.images[ref_id];
+
+                sink.draw(None, transform, &vello::peniko::Brush::Image(
+                    vello::peniko::Image::new(img.data.clone(), vello::peniko::Format::Rgba8, img.width, img.height)
+                ), &Rect::new(0.0, 0.0, img.width as f64, img.height as f64));
+            }
         }
         for _ in 0..layer.masks.len() + clip as usize + (layer.mask_layer.is_some() as usize * 2) {
             sink.pop_layer();

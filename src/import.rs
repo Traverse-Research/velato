@@ -48,7 +48,17 @@ pub fn import_composition(
                 }
                 target.assets.insert(precomp.id.clone(), layers);
             }
-            _ => {}
+            bodymovin::sources::Asset::Image(image) => {
+                let url = data_url::DataUrl::process(&image.name).unwrap();
+                let (body, _fragment) = url.decode_to_vec().unwrap();
+                let img = image::io::Reader::new(std::io::Cursor::new(body)).with_guessed_format().unwrap().decode().unwrap().into_rgba8();
+
+                target.images.insert(image.id.clone(), crate::RgbaImage {
+                    data: peniko::Blob::new(std::sync::Arc::new(img.as_raw().clone())),
+                    width: img.width(),
+                    height: img.height(),
+                });
+            }
         }
     }
     idmap.clear();
@@ -100,7 +110,12 @@ fn conv_layer(source: &bodymovin::layers::AnyLayer) -> Option<(Layer, usize, Opt
             }
             layer.content = Content::Shape(shapes);
         }
-        _ => return None,
+        AnyLayer::Image(image) => {
+            // dbg!(image);
+            layer.content = Content::Image { ref_id: image.mixin.ref_id.clone() };
+            return None;
+        },
+        _=> return None,
     }
     let (id, matte_mode) = params;
     Some((layer, id, matte_mode))
