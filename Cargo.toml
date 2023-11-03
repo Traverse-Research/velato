@@ -27,6 +27,6 @@ vello = { git = "https://github.com/linebender/vello", rev = "34d313d0decc6c3ddb
 
 [dependencies]
 vello = { workspace = true }
-bodymovin = { git = "https://github.com/Traverse-Research/bodymovin-rs.git" }
+bodymovin = { git = "https://github.com/Traverse-Research/bodymovin-rs.git", rev = "e65aea9a701a0c934382ae0037343ecb0ac6976a" }
 data-url = "0.3"
 image = "0.24"
